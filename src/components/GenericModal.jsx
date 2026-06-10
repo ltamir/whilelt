@@ -1,7 +1,7 @@
 import { Button, Modal } from 'react-bootstrap'
 
 
-const ModalHOC = ({ title, show, onHide, children }) => {
+const GenericModal = ({ title, show, onHide, children }) => {
 
     return (
         <Modal
@@ -28,4 +28,4 @@ const ModalHOC = ({ title, show, onHide, children }) => {
     )
 }
 
-export default ModalHOC;
+export default GenericModal;

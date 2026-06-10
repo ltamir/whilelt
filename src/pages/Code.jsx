@@ -3,7 +3,7 @@ import { Container, Form, Button, Row, Col, InputGroup } from 'react-bootstrap';
 // import { usePDF } from 'react-to-pdf'
 import { Page, Text, View, Document, StyleSheet, PDFDownloadLink, Font } from '@react-pdf/renderer';
 import '../css/code.css'
-import ModalHOC from '../components/ModalHOC'
+import GenericModal from '../components/GenericModal'
 
 Font.register({
     family: 'Noto Sans Hebrew',
@@ -223,7 +223,7 @@ const Code = () => {
 
             </Row>
 
-            <ModalHOC title={!comment.commentId ? 'ההערה חדשה' : 'עריכת הערה'} onHide={hide} show={comment.codeId != ''}>
+            <GenericModal title={!comment.commentId ? 'ההערה חדשה' : 'עריכת הערה'} onHide={hide} show={comment.codeId != ''}>
                 <Form.Group controlId='comment' >
                     <Form.Control type='text' dir='rtl'
                         onChange={setCommentText} value={comment.text} />
@@ -232,7 +232,7 @@ const Code = () => {
                     {comment.commentId && <Button type='button' onClick={onUpdateComment}>עדכון</Button>}
                     <Button type='button' onClick={hide}>ביטול</Button>
                 </Form.Group>
-            </ModalHOC>
+            </GenericModal>
 
             <div className='line-list' >
                 {

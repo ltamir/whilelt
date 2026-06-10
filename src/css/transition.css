@@ -1,0 +1,20 @@
+
+.transition-container{
+    position: absolute;
+    width:50px;
+    cursor: pointer;
+}
+
+.transision-line{
+    border: 2px solid #223344;
+    flex: 7;
+    margin-bottom: 5px;
+}
+.transition-text{
+    text-align: center;
+}
+.transision-arrow{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

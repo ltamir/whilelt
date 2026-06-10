@@ -1,0 +1,42 @@
+.state {
+    border-radius: 50%;
+    border: 2px solid #223344;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 15px;
+    cursor: pointer;
+}
+
+.state p {
+    margin: 0;
+}
+
+.state-connector-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.state-connector {
+    background-color: red;
+    height: 15px;
+    width: 100%;
+    flex: 7;
+    margin-bottom: 5px;
+}
+
+.vertex-right, .vertex-left{
+    position: relative;
+    color: red;
+    
+}
+.vertex-right{
+    left: 10px;
+}
+.vertex-left{
+    left: -10px;
+}

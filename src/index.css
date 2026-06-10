@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Noto+Sans+Hebrew:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+#root {
+
+  box-sizing: border-box;
+  font-family: "Roboto", "Noto Sans Hebrew", sans-serif;
+}
+
+
+
+[data-bs-theme="light"] {
+  --bs-light: #0141a0;
+  --bs-light-rgb: 1, 65, 160;
+   --bs-body-bg: #ecececc4;
+  --bs-body-color: #0141a0;
+  /* --bs-light-rgb: 244, 246, 249; */
+  /* --bs-dark: #1e293b; */
+  /* --bs-dark-rgb: 30, 41, 59; */
+}
+ .bg-light {
+  background-color: #3a3b3b !important;
+}
+
+/* Replace dark mode colors globally */
+[data-bs-theme="dark"] {
+  --bs-light: #334155;
+  --bs-light-rgb: 51, 65, 85;
+  --bs-dark: #0f172a;
+  --bs-dark-rgb: 15, 23, 42;
+}

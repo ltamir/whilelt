@@ -1,0 +1,12 @@
+.form-switch .form-check-input:checked {
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
+
+.brand{
+    padding-bottom: 0.5rem !important;
+}
+.brand-active {
+    /* border-bottom: var(--bs-nav-underline-border-width, 0.125rem) solid currentColor; */
+    
+}

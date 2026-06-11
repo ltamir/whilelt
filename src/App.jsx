@@ -69,23 +69,23 @@ function App() {
           <Navbar.Collapse id="bottom-navbar">
             <Nav className='w-100 d-flex justify-content-between align-items-center'>
               <Nav.Link href="https://www.linkedin.com/in/lior-tamir-b61b191a/" target="_blank">
-               <img
-              src="/images/linkedin_white.png"
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-              alt="React Bootstrap logo"
-            />              
+                <img
+                  src="/images/linkedin_white.png"
+                  width="30"
+                  height="30"
+                  className="d-inline-block align-top"
+                  alt="React Bootstrap logo"
+                />
               </Nav.Link>
-              <Navbar.Text className="text-center" style={{color:'#FFF'}}>צרו קשר ב lior.tamir@gmail.com  או ב 054.6369037</Navbar.Text>
+              <Navbar.Text className="text-center" style={{ color: '#FFF' }}>צרו קשר ב <a href='mailto:lior.tamir@gmail.com'>lior.tamir@gmail.com</a>  או ב <a href='https://wa.me/0546369037' target="_blank">054.6369037</a></Navbar.Text>
               <Nav.Link href="https://github.com/ltamir" target="_blank">
-               <img
-              src="/images/github_white.png"
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-              alt="React Bootstrap logo"
-            />
+                <img
+                  src="/images/github_white.png"
+                  width="30"
+                  height="30"
+                  className="d-inline-block align-top"
+                  alt="React Bootstrap logo"
+                />
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

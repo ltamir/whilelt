@@ -151,7 +151,7 @@ const Code = () => {
                 </Row>
             </Form>
 
-            {show && <GenericModal title={!comment.commentId ? 'הערה חדשה' : 'עריכת הערה'} onHide={hide} show={commentModalOn}>
+            {commentModalOn && <GenericModal title={!comment.commentId ? 'הערה חדשה' : 'עריכת הערה'} onHide={hide} show={commentModalOn}>
                 <Form.Group controlId='comment' >
                     <Form.Control type='text' dir='rtl'
                         onChange={setCommentText} value={comment.text} />
@@ -196,11 +196,11 @@ const Line = ({ line, index, commentForm }) => {
 
     return (
         <Row className='line g-0' dir='ltr' >
-            <Col md="1" className='add-comment'><span title='add comment' onClick={() => commentForm(line.codeId)}>&#x2795;</span></Col>
-            <Col md='auto'>
+            <Col md='11'>
                 <pre style={{ whiteSpace: 'pre-wrap', marginBottom: 0 }}>{line.text}</pre>
 
             </Col>
+            <Col md="1" className='add-comment'><span className='float-end' title='add comment' onClick={() => commentForm(line.codeId)}>&#x2795;</span></Col>
         </Row>
     )
 }
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     rtl: {
         direction: 'rtl',
         textAlign: 'right',
+        color: 'red',
         fontFamily: 'Noto Sans Hebrew',
         fontSize: 10,
     },

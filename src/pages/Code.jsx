@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Container, Form, Button, Row, Col, InputGroup } from 'react-bootstrap';
 // import { usePDF } from 'react-to-pdf'
 import { Page, Text, View, Document, StyleSheet, PDFDownloadLink, Font } from '@react-pdf/renderer';
@@ -39,93 +39,12 @@ Font.register({
     ]
 });
 
-const dummy = `
-public class Animal
-    {
-        private string color;   // protected string color
-        private int weight;
-        public Animal(string color, int weight)
-        {
-            this.color = color;
-            this.weight = weight;
-        }
-        public override string ToString()
-        {
-            return "My color is " + this.color + "! And I weigh " + weight + " kilos!";
-        }
-        public string GetColor(){return this.color;}
-    }
-    public class Bird : Animal
-    {
-        private bool isFlying;
-        public Bird(string color, int weight, bool isFlying) : base(color, weight)
-        {
-            this.isFlying = isFlying;
-        }
-        public void Zoo()
-        {
-            Console.WriteLine("Hello");
-        }
-        public override string ToString()
-        {
-            return "I'm a bird " + base.ToString();
-        }
-    }
-    public class Parrot : Bird
-    {
-        private bool isTalking;
 
-        public Parrot(string color, int weight, bool isFlying, bool isTalking) : base(color, weight, isFlying)
-        {
-            this.isTalking = isTalking;
-        }
-
-        public void Zoo()
-        {
-            Console.WriteLine("Hello");
-        }
-        public override string ToString()
-        {
-            return "I'm a parrot My color is " + this.GetColor()  ;   
-        }
-    }
-    public class Fish : Animal
-    {
-        private string waterType;
-        public Fish(string color, int weight, string waterType) : base(color, weight)
-        {
-            this.waterType = waterType;
-        }
-    }
-    public class Snake : Animal
-    {
-        private int length;
-        private bool isVenomous;
-        public Snake(string color, int weight, int length, bool isVenemous) : base(color, weight)
-        {
-            this.length = length;
-            this.isVenomous = isVenemous;
-        }
-        public override string ToString()
-        {
-            string s ="";
-            if(isVenomous)
-            {
-                s = "I'm venomous";
-            }
-            else
-            {
-                s = "I'm not venemouse";
-            }
-            return "I'm a snake! " + s + base.ToString();
-        }
-    }
-`
 const Code = () => {
     const [code, setCode] = useState([])
-    const [text, setText] = useState(dummy)
+    const [text, setText] = useState("")
     const [comment, setComment] = useState({ commentId: null, codeId: "", codeIndex: -1, text: '' })
-
+    const [commentModalOn, setCommentModalOn] = useState(false)
     const onAdd = (event) => {
         event.preventDefault();
         setCode(prev => [...prev, ...text.split("\n").map((line, i) => ({ codeId: crypto.randomUUID(), text: line, comments: [] }))])
@@ -143,11 +62,14 @@ const Code = () => {
             const commentIndex = code[codeIndex].comments.findIndex(c => c.commentId == commentId)
             comment.text = code[codeIndex].comments[commentIndex].text
         }
-        setComment(comment)
+        setComment(comment);
+        setCommentModalOn(true);
     }
-    const hide = () => {
+    const hide = useCallback(() => {
         setComment({ commentId: null, codeId: "", codeIndex: -1, text: '' })
-    }
+        setCommentModalOn(false)
+    }, [commentModalOn]);
+
     const setCommentText = (event) => {
         setComment(prev => ({ ...prev, text: event.target.value }))
     }
@@ -165,6 +87,7 @@ const Code = () => {
         const commentIndex = code[codeIndex].comments.findIndex(c => c.commentId == commentId)
         const comment = code[codeIndex].comments[commentIndex];
         setComment({ ...comment, codeIndex })
+        setCommentModalOn(true);
     }
     const onUpdateComment = () => {
         const codeIndex = code.findIndex(c => c.codeId == comment.codeId)
@@ -175,12 +98,17 @@ const Code = () => {
         hide();
     }
     const onDeleteComment = (codeId, commentId) => {
-
+        const codeIndex = code.findIndex(c => c.codeId == codeId)
+        const commentIndex = code[codeIndex].comments.findIndex(c => c.commentId == commentId)
+        const temp = [...code];
+        temp[codeIndex].comments.splice(commentIndex)
+        setCode(temp);
     }
     const onGeneratePDF = () => {
         if (code.length == 0) return;
         toPDF();
     }
+
 
     return (
         <Container>
@@ -202,10 +130,13 @@ const Code = () => {
                     <Col md='1'>
                         <Button type='submit'>הוספה</Button>
                     </Col>
-                    <Col md='1'>
-                        <Button type='button'>מחיקה</Button>
+                    <Col md='2'>
+                        <Button onClick={() => setText("")} type='button'>ריקון קוד</Button>
                     </Col>
-                    <Col md='8'>
+                    <Col md='1'>
+                        <Button onClick={onClear} type='button'>מחיקה</Button>
+                    </Col>
+                    <Col md='6'>
                     </Col>
                     <Col md='2'>
                         <Col>
@@ -219,20 +150,27 @@ const Code = () => {
                     </Col>
                 </Row>
             </Form>
-            <Row>
 
-            </Row>
-
-            <GenericModal title={!comment.commentId ? 'ההערה חדשה' : 'עריכת הערה'} onHide={hide} show={comment.codeId != ''}>
+            {show && <GenericModal title={!comment.commentId ? 'הערה חדשה' : 'עריכת הערה'} onHide={hide} show={commentModalOn}>
                 <Form.Group controlId='comment' >
                     <Form.Control type='text' dir='rtl'
                         onChange={setCommentText} value={comment.text} />
-                    {comment.codeIndex > -1 && <Form.Text className="text-muted">{code[comment.codeIndex].text}</Form.Text>}
-                    {!comment.commentId && <Button type='button' onClick={onAddComment}>הוספה</Button>}
-                    {comment.commentId && <Button type='button' onClick={onUpdateComment}>עדכון</Button>}
-                    <Button type='button' onClick={hide}>ביטול</Button>
+                    <Row dir='ltr'>
+                        <Col>
+                            {comment.codeIndex > -1 && <Form.Text className="text-muted">{code[comment.codeIndex].text}</Form.Text>}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md="1">
+                            {!comment.commentId && <Button type='button' onClick={onAddComment}>הוספה</Button>}
+                            {comment.commentId && <Button type='button' onClick={onUpdateComment}>עדכון</Button>}
+                        </Col>
+                        <Col md="1">
+                            <Button type='button' onClick={hide}>ביטול</Button>
+                        </Col>
+                    </Row>
                 </Form.Group>
-            </GenericModal>
+            </GenericModal>}
 
             <div className='line-list' >
                 {

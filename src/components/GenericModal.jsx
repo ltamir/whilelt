@@ -1,6 +1,5 @@
 import { Button, Modal } from 'react-bootstrap'
 
-
 const GenericModal = ({ title, show, onHide, children }) => {
 
     return (

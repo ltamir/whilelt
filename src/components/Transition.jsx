@@ -22,7 +22,7 @@ const Transition = ({ transition, editTransition, editMode, value,  onChange, on
                 className='transition-text'
             >
                 {/* <Editor editMode={editMode} value={title} onChange={e => setTitle(e.target.value)} onStart={onStartEdit} onSave={onSaveEdit} onCancel={onCancelEdit} /> </div> */}
-                <Editor editMode={editMode} value={value} onChange={onChange} onStart={onStart} onSave={() =>onSave(editTransition, transition)} onCancel={onCancel} /> </div>
+                <Editor editMode={editMode} value={value} onChange={onChange} onStart={onStart} onSave={() =>onSave(editTransition, transition)} onCancel={() =>onCancel(transition.title)} /> </div>
             <div className='transision-arrow'>
                 <span>&#x25b6;</span>
                 <div className='transision-line'></div>

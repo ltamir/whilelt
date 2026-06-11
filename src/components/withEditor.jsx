@@ -8,8 +8,8 @@ const withEditor = (Component) => {
         const onStartEdit = () => {
             setEditMode(true)
         }
-        const onCancelEdit = () => {
-            setTitle(transition.title)
+        const onCancelEdit = (value) => {
+            setTitle(value)
             setEditMode(false)
         }
 

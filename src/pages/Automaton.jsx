@@ -19,7 +19,7 @@ const Automaton = () => {
                 left = 15;
             }
             
-            return [...prev, {top, left, title, type:'state', width:50}]
+            return [...prev, {id:crypto.randomUUID(), top, left, title, type:'state', width:50}]
         })
     }
     const addTransition = () => {
@@ -33,7 +33,14 @@ const Automaton = () => {
                 left = 15;
             }
             
-            return [...prev, {top, left, title, type:'trx', width:50}]
+            return [...prev, {id:crypto.randomUUID(), top, left, title, type:'trx', width:50}]
+        })
+    }
+    const editTransition = (transition) => {
+        setStates(prev => {
+            const temp = prev.filter(s => s.id != transition.id)
+            temp.push(transition);
+            return temp
         })
     }
 
@@ -68,7 +75,7 @@ const Automaton = () => {
                     states.filter(s => s.type== 'state').map(q => <State key={q.title} state={q}/>)
                 }
                 {
-                    states.filter(s => s.type== 'trx').map(q => <Transition key={q.title} transition={q}/>)
+                    states.filter(s => s.type== 'trx').map(q => <Transition key={q.title} transition={q} editTransition={editTransition}/>)
                 }
             </div>
         </div>

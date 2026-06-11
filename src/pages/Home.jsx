@@ -102,15 +102,6 @@ const Home = () => {
                     </ListGroup>
                 </Col>
             </Row>
-            <Row>
-                <Col></Col>
-            </Row>
-            <Row>
-                <Col></Col>
-            </Row>
-            <Row>
-                <Col></Col>
-            </Row>
         </Container>
     )
 }

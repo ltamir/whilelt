@@ -25,9 +25,13 @@ const Automaton = () => {
 
     useEffect(() => {
         setDraggingTransition(null);
+
+    }, [])
+
+    const loadExample = () => {
         setModel(x.model)
         setTransitions(x.transitions)
-    }, [])
+    }
 
     const addState = () => {
         setModel(prev => {
@@ -45,21 +49,21 @@ const Automaton = () => {
         })
     }
 
-    const addTransition = () => {
-        setModel(prev => {
-            if (!containerRef.current) return prev;
-            const title = "ABC";
-            const states = [...prev.states]
-            let top = states.length === 0 ? 15 : states[states.length - 1].top;
-            let left = states.length == 0 ? 15 : states[states.length - 1].left + states[states.length - 1].width;
-            if (states.length > 0 && left > containerRef.current.offsetWidth) {
-                top += 100;
-                left = 15;
-            }
-            states.push({ id: crypto.randomUUID(), top, left, title, type: 'trx', width: 75, height: 50, source: null, to: target })
-            return { ...prev, states, }
-        })
-    }
+    // const addTransition = () => {
+    //     setModel(prev => {
+    //         if (!containerRef.current) return prev;
+    //         const title = "ABC";
+    //         const states = [...prev.states]
+    //         let top = states.length === 0 ? 15 : states[states.length - 1].top;
+    //         let left = states.length == 0 ? 15 : states[states.length - 1].left + states[states.length - 1].width;
+    //         if (states.length > 0 && left > containerRef.current.offsetWidth) {
+    //             top += 100;
+    //             left = 15;
+    //         }
+    //         states.push({ id: crypto.randomUUID(), top, left, title, type: 'trx', width: 75, height: 50, source: null, to: target })
+    //         return { ...prev, states, }
+    //     })
+    // }
     const editTransition = (transition) => {
         setTransitions(transactions => [...transactions.filter(t => t.id != transition.id), transition])
     }
@@ -216,11 +220,11 @@ const Automaton = () => {
     return (
         <div className='p-2 m-2'>
             <Row>
-                <Col md='9'></Col>
-                <Col md='3' className="d-flex justify-content-between">
-                    <button onClick={addTransition}>מעבר חדש</button>
+                <Col md='auto'></Col>
+                <Col md='4' className="d-flex justify-content-between">
                     <button onClick={addState}>מצב חדש</button>
-                    <button onClick={()=>console.log(model, transitions)}>דוגמא</button>
+                    <button onClick={loadExample}>טעינת דוגמא</button>
+                    <button onClick={()=>console.log(model, transitions)}>דוגמא בלוג</button>
                 </Col>
                 <Col>
                     <p></p>

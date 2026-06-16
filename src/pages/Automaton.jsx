@@ -131,7 +131,7 @@ const Automaton = () => {
         setDraggingId(id)
     }
 
-    const getDomPoint = useCallback( (svgX, svgY) =>{
+    const getDomPoint = useCallback((svgX, svgY) => {
         const svg = containerRef.current;
         const p = new DOMPoint(svgX, svgY);
         const screenPoint = p.matrixTransform(svg.getScreenCTM());
@@ -203,16 +203,41 @@ const Automaton = () => {
 
         if (!draggingId) return;
 
-        const parent = event.currentTarget.getBoundingClientRect();
+        // const parent = event.currentTarget.getBoundingClientRect();
+        const svg = event.currentTarget;
+        const pt = svg.createSVGPoint();
 
-        setModel(prev => {
-            const index = prev.states.findIndex(q => q.id == draggingId);
-            const states = [...prev.states]
+        pt.x = event.clientX;
+        pt.y = event.clientY;
 
-            states[index].top = event.clientY - parent.top// - states[index].height / 2;
-            states[index].left = event.clientX - parent.left// - states[index].width / 2;
-            return { ...prev, states };
+        const svgPoint = pt.matrixTransform(
+            svg.getScreenCTM().inverse()
+        );
+
+        setModel(model =>
+        ({
+            ...model, states: model.states.map(s =>
+                s.id === draggingId
+                    ? {
+                        ...s, left: svgPoint.x, top: svgPoint.y,
+                    }
+                    : s
+            )
+
         })
+        );
+
+        setTransitions(transitions => transitions.map(t => {
+            const updatedTransition = { ...t }
+            if (t.sourceId == draggingId) {
+                updatedTransition.x1 = svgPoint.x + Directions[t.fromSide].x
+                updatedTransition.y1 = svgPoint.y + Directions[t.fromSide].y
+            } else if (t.targetId == draggingId) {
+                updatedTransition.x2 = svgPoint.x + Directions[t.toSide].x
+                updatedTransition.y2 = svgPoint.y + Directions[t.toSide].y
+            }
+            return updatedTransition
+        }))
         setDraggingId(null);
     }
 
@@ -224,7 +249,7 @@ const Automaton = () => {
                 <Col md='4' className="d-flex justify-content-between">
                     <button onClick={addState}>מצב חדש</button>
                     <button onClick={loadExample}>טעינת דוגמא</button>
-                    <button onClick={()=>console.log(model, transitions)}>דוגמא בלוג</button>
+                    <button onClick={() => console.log(model, transitions)}>דוגמא בלוג</button>
                 </Col>
                 <Col>
                     <p></p>
@@ -252,7 +277,7 @@ const Automaton = () => {
                 {model.states.filter(s => s.type == 'state').map(q => <State key={q.id} state={q} onDragStart={onDragStart} onAddTransition={onStartTransition} onEndTransition={onEndTransition} draggingTransition={draggingTransition} setDraggingTransition={setDraggingTransition} />)}
 
                 {transitions.map(t => (
-                    <Transition key={t.id} transition={t} editTransition={editTransition} getDomPoint={getDomPoint}/>
+                    <Transition key={t.id} transition={t} editTransition={editTransition} getDomPoint={getDomPoint} />
                 ))}
                 {draggingTransition && (
                     <path

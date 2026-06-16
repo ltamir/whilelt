@@ -10,10 +10,12 @@
 
 
 [data-bs-theme="light"] {
-  --bs-light: #0141a0;
-  --bs-light-rgb: 1, 65, 160;
+  --bs-light: #0e2f7e;
+  --bs-light-rgb: 186, 200, 214;
    --bs-body-bg: #ecececc4;
   --bs-body-color: #0141a0;
+  --bs-primary-rgb: 19, 106, 213;
+
   /* --bs-light-rgb: 244, 246, 249; */
   /* --bs-dark: #1e293b; */
   /* --bs-dark-rgb: 30, 41, 59; */
@@ -26,6 +28,7 @@
 [data-bs-theme="dark"] {
   --bs-light: #334155;
   --bs-light-rgb: 51, 65, 85;
-  --bs-dark: #0f172a;
+  --bs-dark: #efefef;
   --bs-dark-rgb: 15, 23, 42;
+  --bs-primary-rgb:17, 34, 51;
 }

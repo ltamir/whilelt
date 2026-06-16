@@ -1,85 +1,272 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Container, Row, Col } from 'react-bootstrap'
 import State from "../components/State";
-
-import '../css/automaton.css'
 import Transition from "../components/Transition";
+import '../css/automaton.css'
+
+import x from '../assets/automaton.json'
+console.log(x);
+
+
+const Directions = {
+    N: { x: 0, y: -30 },
+    W: { x: 30, y: 0 },
+    E: { x: -30, y: 0 },
+    S: { x: 0, y: 30 },
+}
+const defaultTransition = { id: crypto.randomUUID(), alphabet: 'ABC', sourceId: '', targetId: '', x1: 0, y1: 0, x2: 0, y2: 0, fromSide: Directions.W, toSide: Directions.E }
 
 const Automaton = () => {
-    const [states, setStates] = useState([])
-    const contsinerRef = useRef(null)
+    const [model, setModel] = useState({ states: [], lastState: 0 })
+    const [draggingId, setDraggingId] = useState(null);
+    const [draggingTransition, setDraggingTransition] = useState({ ...defaultTransition })
+    const [transitions, setTransitions] = useState([])
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        setDraggingTransition(null);
+        setModel(x.model)
+        setTransitions(x.transitions)
+    }, [])
 
     const addState = () => {
-        setStates(prev => {
-            if(!contsinerRef.current)return prev;
-            const title = 'q' + prev.length;
-            let top = prev.length === 0?15:prev[prev.length-1].top;
-            let left = prev.length == 0?15 : prev[prev.length-1].left + 100;
-            if(prev.length > 0 && left > contsinerRef.current.offsetWidth){
+        setModel(prev => {
+            if (!containerRef.current) return prev;
+            const title = 'q' + prev.lastState;
+            const states = [...prev.states]
+            let top = states.length === 0 ? 50 : states[states.length - 1].top;
+            let left = states.length == 0 ? 50 : states[states.length - 1].left + 100;
+            if (states.length > 0 && left > containerRef.current.offsetWidth) {
                 top += 100;
                 left = 15;
             }
-            
-            return [...prev, {id:crypto.randomUUID(), top, left, title, type:'state', width:50}]
+            states.push({ id: crypto.randomUUID(), top, left, title, type: 'state', width: 50, height: 50, transitions: [], isStart: true, isAcepting: false })
+            return { states, lastState: prev.lastState + 1 }
         })
     }
+
     const addTransition = () => {
-        setStates(prev => {
-            if(!contsinerRef.current)return prev;
-            const title = 'q' + prev.length;
-            let top = prev.length === 0?15:prev[prev.length-1].top;
-            let left = prev.length == 0?15 : prev[prev.length-1].left + 100;
-            if(prev.length > 0 && left > contsinerRef.current.offsetWidth){
+        setModel(prev => {
+            if (!containerRef.current) return prev;
+            const title = "ABC";
+            const states = [...prev.states]
+            let top = states.length === 0 ? 15 : states[states.length - 1].top;
+            let left = states.length == 0 ? 15 : states[states.length - 1].left + states[states.length - 1].width;
+            if (states.length > 0 && left > containerRef.current.offsetWidth) {
                 top += 100;
                 left = 15;
             }
-            
-            return [...prev, {id:crypto.randomUUID(), top, left, title, type:'trx', width:50}]
+            states.push({ id: crypto.randomUUID(), top, left, title, type: 'trx', width: 75, height: 50, source: null, to: target })
+            return { ...prev, states, }
         })
     }
     const editTransition = (transition) => {
-        setStates(prev => {
-            const temp = prev.filter(s => s.id != transition.id)
-            temp.push(transition);
-            return temp
-        })
+        setTransitions(transactions => [...transactions.filter(t => t.id != transition.id), transition])
+    }
+
+    // transitions
+    function getPointOnCircle(cx, cy, tx, ty, r) {
+        const dx = tx - cx;
+        const dy = ty - cy;
+
+        const angle = Math.atan2(dy, dx);
+
+        return {
+            x: cx + r * Math.cos(angle),
+            y: cy + r * Math.sin(angle)
+        };
+    }
+
+    const onStartTransition = (state, direction) => {
+        const from = getPointOnCircle(
+            state.left,
+            state.top,
+            state.left,
+            state.top,
+            30
+        );
+
+        setDraggingTransition({
+            ...defaultTransition,
+            sourceId: state.id,
+            fromSide: direction,
+            x1: state.left + Directions[direction].x,
+            y1: state.top + Directions[direction].y,
+            x2: state.left,
+            y2: state.top,
+            alphabet: 'ABC'
+        });
+
+    }
+
+
+    const onEndTransition = (state, direction) => {
+        if (draggingTransition) {
+            const from = getPointOnCircle(
+                state.left,
+                state.top,
+                draggingTransition.x2,
+                draggingTransition.y2,
+                30
+            );
+
+            const transition = { ...draggingTransition, id: crypto.randomUUID(), targetId: state.id, x2: from.x, y2: from.y, toSide: direction }
+            // const transition = { ...draggingTransition, id: crypto.randomUUID(), targetId: state.id, x2: state.left + Directions[direction].x, y2: state.top + Directions[direction].y }
+            setTransitions(transitions => [...transitions, transition])
+            const startStateIndex = model.states.findIndex(s => s.id == draggingTransition.sourceId)
+            const endStateIndex = model.states.findIndex(s => s.id == state.id)
+            const states = [...model.states]
+            states[startStateIndex].transitions.push(transition)
+            states[endStateIndex].transitions.push(transition)
+            setModel({ ...model, states })
+            setDraggingTransition(null)
+        }
+    }
+
+    const onDragStart = (id) => {
+        setDraggingId(id)
+    }
+
+    const getDomPoint = useCallback( (svgX, svgY) =>{
+        const svg = containerRef.current;
+        const p = new DOMPoint(svgX, svgY);
+        const screenPoint = p.matrixTransform(svg.getScreenCTM());
+        return screenPoint
+    }, [])
+    const getSvgPoint = (event) => {
+        const svg = containerRef.current;
+        const pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+
+        return pt.matrixTransform(
+            svg.getScreenCTM().inverse()
+        );
     }
 
     const onDragOver = (event) => {
-        event.preventDefault()
+        if (draggingTransition) {
+            const { x, y } = getSvgPoint(event);
+
+            setDraggingTransition(t => ({
+                ...t,
+                x2: x,
+                y2: y
+            }));
+            return;
+        }
+
+        if (!draggingId) return;
+        const svg = event.currentTarget;
+        const pt = svg.createSVGPoint();
+
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+
+        const svgPoint = pt.matrixTransform(
+            svg.getScreenCTM().inverse()
+        );
+
+        setModel(model =>
+        ({
+            ...model, states: model.states.map(s =>
+                s.id === draggingId
+                    ? {
+                        ...s, left: svgPoint.x, top: svgPoint.y,
+                    }
+                    : s
+            )
+
+        })
+        );
+        setTransitions(transitions => transitions.map(t => {
+            const updatedTransition = { ...t }
+            if (t.sourceId == draggingId) {
+                updatedTransition.x1 = svgPoint.x + Directions[t.fromSide].x
+                updatedTransition.y1 = svgPoint.y + Directions[t.fromSide].y
+            } else if (t.targetId == draggingId) {
+                updatedTransition.x2 = svgPoint.x + Directions[t.toSide].x
+                updatedTransition.y2 = svgPoint.y + Directions[t.toSide].y
+            }
+            return updatedTransition
+        }))
     }
+
     const onDrop = (event) => {
-        event.preventDefault()
-        const title = event.dataTransfer.getData('text/plain')
+        if (draggingTransition) {
+            setDraggingTransition(null);    // relesed before was over an edge
+        }
+
+        if (!draggingId) return;
+
         const parent = event.currentTarget.getBoundingClientRect();
 
+        setModel(prev => {
+            const index = prev.states.findIndex(q => q.id == draggingId);
+            const states = [...prev.states]
 
-        setStates(prev => {
-            const index = prev.findIndex(q => q.title == title);
-            const temp= [...prev]
-            temp[index].left = event.clientX - parent.left - temp[index].width/2;
-            temp[index].top = event.clientY - parent.top - temp[index].width/2;
-            return temp;
+            states[index].top = event.clientY - parent.top// - states[index].height / 2;
+            states[index].left = event.clientX - parent.left// - states[index].width / 2;
+            return { ...prev, states };
         })
+        setDraggingId(null);
     }
 
+
     return (
-        <div>
-            <div>
-                <button onClick={addState}>ADD</button>
-                <button onClick={addTransition}>ADD</button>
-                <span>{states.length}</span>
-            </div>
-            <div className="automaton-container" ref={contsinerRef} onDragOver={onDragOver} onDrop={onDrop}>
-                {/* <Transition transition={{top:15, left:65, title:'1'}} /> */}
-                {
-                    states.filter(s => s.type== 'state').map(q => <State key={q.title} state={q}/>)
-                }
-                {
-                    states.filter(s => s.type== 'trx').map(q => <Transition key={q.title} transition={q} editTransition={editTransition}/>)
-                }
-            </div>
+        <div className='p-2 m-2'>
+            <Row>
+                <Col md='9'></Col>
+                <Col md='3' className="d-flex justify-content-between">
+                    <button onClick={addTransition}>מעבר חדש</button>
+                    <button onClick={addState}>מצב חדש</button>
+                    <button onClick={()=>console.log(model, transitions)}>דוגמא</button>
+                </Col>
+                <Col>
+                    <p></p>
+                </Col>
+            </Row>
+
+            <svg
+                className="automaton-container"
+                ref={containerRef}
+                onPointerMove={onDragOver}
+                onPointerUp={onDrop}>
+                <defs>
+                    <marker
+                        id="arrow"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="8"
+                        refY="3"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path d="M0,0 L0,6 L9,3 z" fill="black" />
+                    </marker>
+                </defs>
+                {model.states.filter(s => s.type == 'state').map(q => <State key={q.id} state={q} onDragStart={onDragStart} onAddTransition={onStartTransition} onEndTransition={onEndTransition} draggingTransition={draggingTransition} setDraggingTransition={setDraggingTransition} />)}
+
+                {transitions.map(t => (
+                    <Transition key={t.id} transition={t} editTransition={editTransition} getDomPoint={getDomPoint}/>
+                ))}
+                {draggingTransition && (
+                    <path
+                        d={`
+                            M ${draggingTransition.x1} ${draggingTransition.y1}
+                            Q ${(draggingTransition.x1 + draggingTransition.x2) / 2} ${draggingTransition.y1 - 50}
+                            ${draggingTransition.x2} ${draggingTransition.y2}
+                        `}
+                        stroke="gray"
+                        fill="none"
+                        strokeDasharray="5,5"
+                    />
+                )}
+            </svg>
         </div>
     )
 }
+
+
 
 export default Automaton;

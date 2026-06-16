@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      <Navbar bg="primary" data-bs-theme="dark" expand="lg" sticky="top">
+      <Navbar bg="primary" expand="lg" sticky="top">
         <Container>
           <Navbar.Brand className={location.pathname === "/" ? "brand-active brand me-2 ms-2" : "brand me-2 ms-2"} as={Link} to="/" onClick={() => setActive("/")}>בית</Navbar.Brand>
           {/* <Navbar.Text>Signed in as: </Navbar.Text> */}
@@ -63,7 +63,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </Container>
-      <Navbar bg="primary" data-bs-theme="dark" expand="lg" sticky="bottom">
+      <Navbar bg="primary"  expand="lg" sticky="bottom">
         <Container fluid>
           <Navbar.Toggle aria-controls="bottom-navbar" />
           <Navbar.Collapse id="bottom-navbar">

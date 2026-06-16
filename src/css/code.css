@@ -34,3 +34,9 @@
     /* vertical-align: super; */
     /* line-height: 1rem; */
 }
+
+.transition-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}

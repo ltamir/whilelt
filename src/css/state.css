@@ -1,13 +1,13 @@
 .state {
-    border-radius: 50%;
-    border: 2px solid #223344;
-    height: 50px;
-    width: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    left: 15px;
+    /* border-radius: 50%; */
+    /* border: 2px solid #223344; */
+    /* height: 50px; */
+    /* width: 50px; */
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* position: absolute; */
+    /* left: 15px; */
     cursor: pointer;
 }
 

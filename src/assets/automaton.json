@@ -1,0 +1,155 @@
+{"model":{
+    "states": [
+        {
+            "id": "81d68e19-2acc-4371-b220-b7ed8c395179",
+            "top": 50,
+            "left": 50,
+            "title": "q0",
+            "type": "state",
+            "width": 50,
+            "height": 50,
+            "transitions": [
+                {
+                    "id": "55c4c6eb-ae5c-4746-be6f-fa8676092a35",
+                    "alphabet": "ABC",
+                    "sourceId": "81d68e19-2acc-4371-b220-b7ed8c395179",
+                    "targetId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+                    "x1": 80,
+                    "y1": 50,
+                    "x2": 120.00014070898567,
+                    "y2": 49.90811681687285,
+                    "fromSide": "W",
+                    "toSide": "E"
+                }
+            ],
+            "isStart": true,
+            "isAcepting": false
+        },
+        {
+            "id": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+            "top": 50,
+            "left": 150,
+            "title": "q1",
+            "type": "state",
+            "width": 50,
+            "height": 50,
+            "transitions": [
+                {
+                    "id": "55c4c6eb-ae5c-4746-be6f-fa8676092a35",
+                    "alphabet": "ABC",
+                    "sourceId": "81d68e19-2acc-4371-b220-b7ed8c395179",
+                    "targetId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+                    "x1": 80,
+                    "y1": 50,
+                    "x2": 120.00014070898567,
+                    "y2": 49.90811681687285,
+                    "fromSide": "W",
+                    "toSide": "E"
+                },
+                {
+                    "id": "eff28906-f626-497c-87d1-50ffede2a6a4",
+                    "alphabet": "ABC",
+                    "sourceId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+                    "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "x1": 150,
+                    "y1": 80,
+                    "x2": 153.83505153290164,
+                    "y2": 133.13136009224993,
+                    "fromSide": "S",
+                    "toSide": "N"
+                }
+            ],
+            "isStart": true,
+            "isAcepting": false
+        },
+        {
+            "id": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+            "top": 163.12890625,
+            "left": 154.21875,
+            "title": "q2",
+            "type": "state",
+            "width": 50,
+            "height": 50,
+            "transitions": [
+                {
+                    "id": "eff28906-f626-497c-87d1-50ffede2a6a4",
+                    "alphabet": "ABC",
+                    "sourceId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+                    "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "x1": 150,
+                    "y1": 80,
+                    "x2": 153.83505153290164,
+                    "y2": 133.13136009224993,
+                    "fromSide": "S",
+                    "toSide": "N"
+                },
+                {
+                    "id": "6a1dc2fc-3c9e-4c31-a1e5-5ec080bdbeaa",
+                    "alphabet": "ABC",
+                    "sourceId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "x1": 154.21875,
+                    "y1": 193.12890625,
+                    "x2": 155.94559052494753,
+                    "y2": 193.07916537744995,
+                    "fromSide": "S",
+                    "toSide": "S"
+                },
+                {
+                    "id": "6a1dc2fc-3c9e-4c31-a1e5-5ec080bdbeaa",
+                    "alphabet": "ABC",
+                    "sourceId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+                    "x1": 154.21875,
+                    "y1": 193.12890625,
+                    "x2": 155.94559052494753,
+                    "y2": 193.07916537744995,
+                    "fromSide": "S",
+                    "toSide": "S"
+                }
+            ],
+            "isStart": true,
+            "isAcepting": false
+        }
+    ],
+    "lastState": 3
+},
+
+"transitions":[
+    {
+        "id": "55c4c6eb-ae5c-4746-be6f-fa8676092a35",
+        "alphabet": "ABC",
+        "sourceId": "81d68e19-2acc-4371-b220-b7ed8c395179",
+        "targetId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+        "x1": 80,
+        "y1": 50,
+        "x2": 120.00014070898567,
+        "y2": 49.90811681687285,
+        "fromSide": "W",
+        "toSide": "E"
+    },
+    {
+        "id": "eff28906-f626-497c-87d1-50ffede2a6a4",
+        "alphabet": "ABC",
+        "sourceId": "0f6c93db-711d-4ac5-8a7f-634f6e1008f0",
+        "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+        "x1": 150,
+        "y1": 80,
+        "x2": 153.83505153290164,
+        "y2": 133.13136009224993,
+        "fromSide": "S",
+        "toSide": "N"
+    },
+    {
+        "id": "6a1dc2fc-3c9e-4c31-a1e5-5ec080bdbeaa",
+        "alphabet": "ABC",
+        "sourceId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+        "targetId": "ffa42c54-1f05-48e9-bc1a-991b1a442685",
+        "x1": 154.21875,
+        "y1": 193.12890625,
+        "x2": 155.94559052494753,
+        "y2": 193.07916537744995,
+        "fromSide": "S",
+        "toSide": "S"
+    }
+]}

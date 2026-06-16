@@ -1,20 +1,42 @@
-
-.transition-container{
+.transition-container {
     position: absolute;
-    width:50px;
+    width: 75px;
     cursor: pointer;
+
 }
 
-.transision-line{
+.transision-line {
     border: 2px solid #223344;
     flex: 7;
     margin-bottom: 5px;
 }
-.transition-text{
+
+.transision-line-curved {
+    border: 2px solid #223344;
+    border-radius: 25px 25px 0 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    flex: 7;
+    margin-bottom: 5px;
+    height: 25px;
+}
+
+.transition-text {
     text-align: center;
 }
-.transision-arrow{
+
+.transision-arrow {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.alphabet:hover {
+    fill: #FFF;
+    stroke-width: 8px;
+    stroke-linejoin: round;
+    paint-order: stroke fill;
+    stroke: #666;
+    cursor: pointer;
 }
